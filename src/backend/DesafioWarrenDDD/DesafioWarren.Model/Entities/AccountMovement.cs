@@ -10,9 +10,9 @@ namespace DesafioWarren.Model.Entities
         public AccountOperation AccountOperation { get; set; }
         public DateTime OperationDate { get; set; }
         public decimal Amount { get; set; }
-        public virtual int SourceClientId { get; set; }
-        public virtual Client SourceClient { get; set; }
-        public virtual int TargetClientId { get; set; }
-        public virtual Client TargetClient { get; set; }
+        public virtual int AccountId { get; set; }
+        public virtual Account Account { get; set; }
+        public virtual int? TargetAccountId { get; set; }
+        public virtual Account TargetAccount { get; set; }
     }
 }

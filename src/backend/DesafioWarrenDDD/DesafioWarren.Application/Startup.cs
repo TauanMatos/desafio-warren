@@ -4,6 +4,9 @@ using System.IO;
 using System.Reflection;
 using DesafioWarren.Data.Context;
 using DesafioWarren.Data.Identity;
+using DesafioWarren.Data.Repository;
+using DesafioWarren.Model.Interfaces;
+using DesafioWarren.Services.DomainServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -27,11 +30,16 @@ namespace DesafioWarren.Application
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Configurando o uso da classe de contexto para
-            // acesso às tabelas do ASP.NET Identity Core
+
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAccountMovementService, AccountMovementService>();
+
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountMovementRepository, AccountMovementRepository>();
+
+
             services.AddDbContext<WarrenDbContext>(options =>
             {
                 var server = Configuration["database:mysql:server"];
@@ -43,9 +51,6 @@ namespace DesafioWarren.Application
                 options.UseMySql($"Server={server};Port={port};Database={database};Uid={username};Pwd={password}");
             });
 
-            // Ativando a utilização do ASP.NET Identity, a fim de
-            // permitir a recuperação de seus objetos via injeção de
-            // dependências
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<WarrenDbContext>()
                 .AddDefaultTokenProviders();
@@ -71,20 +76,13 @@ namespace DesafioWarren.Application
                 paramsValidation.ValidAudience = tokenConfigurations.Audience;
                 paramsValidation.ValidIssuer = tokenConfigurations.Issuer;
 
-                // Valida a assinatura de um token recebido
                 paramsValidation.ValidateIssuerSigningKey = true;
 
-                // Verifica se um token recebido ainda é válido
                 paramsValidation.ValidateLifetime = true;
 
-                // Tempo de tolerância para a expiração de um token (utilizado
-                // caso haja problemas de sincronismo de horário entre diferentes
-                // computadores envolvidos no processo de comunicação)
                 paramsValidation.ClockSkew = TimeSpan.Zero;
             });
 
-            // Ativa o uso do token como forma de autorizar o acesso
-            // a recursos deste projeto
             services.AddAuthorization(auth =>
             {
                 auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
@@ -127,13 +125,11 @@ namespace DesafioWarren.Application
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WarrenDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
+
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "DesafioWarren V1");
@@ -144,9 +140,6 @@ namespace DesafioWarren.Application
                 app.UseDeveloperExceptionPage();
             }
 
-            // Criação de estruturas, usuários e permissões
-            // na base do ASP.NET Identity Core (caso ainda não
-            // existam)
             new IdentityInitializer(context, userManager, roleManager)
                 .Initialize();
 

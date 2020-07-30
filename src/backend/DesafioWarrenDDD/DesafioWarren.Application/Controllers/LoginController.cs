@@ -12,13 +12,13 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DesafioWarren.Application.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class LoginController : Controller
     {
         [AllowAnonymous]
         [HttpPost]
-        public async Task<object> Post(
-            [FromBody] UserDto usuario,
+        public async Task<LoginResponseDto> Authenticate(
+            [FromBody] LoginRequestDto usuario,
             [FromServices] UserManager<ApplicationUser> userManager,
             [FromServices] SignInManager<ApplicationUser> signInManager,
             [FromServices] SigningConfigurations signingConfigurations,
@@ -69,21 +69,21 @@ namespace DesafioWarren.Application.Controllers
                 });
                 var token = handler.WriteToken(securityToken);
 
-                return new
+                return new LoginResponseDto()
                 {
-                    authenticated = true,
-                    created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
-                    expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
-                    accessToken = token,
-                    message = "OK"
+                    Authenticated = true,
+                    Created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
+                    Expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
+                    AccessToken = token,
+                    Message = "OK"
                 };
             }
             else
             {
-                return new
+                return new LoginResponseDto()
                 {
-                    authenticated = false,
-                    message = "Falha ao autenticar"
+                    Authenticated = false,
+                    Message = "Falha ao autenticar"
                 };
             }
         }

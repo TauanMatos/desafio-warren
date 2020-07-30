@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DesafioWarren.Data\DesafioWarren.Data.csproj" />
+    <ProjectReference Include="..\DesafioWarren.Services\DesafioWarren.Services.csproj" />
   </ItemGroup>
 
 

@@ -12,7 +12,5 @@ namespace DesafioWarren.Model.Entities
         public decimal Amount { get; set; }
         public virtual int AccountId { get; set; }
         public virtual Account Account { get; set; }
-        public virtual int? TargetAccountId { get; set; }
-        public virtual Account TargetAccount { get; set; }
     }
 }

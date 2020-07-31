@@ -3,14 +3,16 @@ using System;
 using DesafioWarren.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DesafioWarren.Data.Migrations
 {
     [DbContext(typeof(WarrenDbContext))]
-    partial class WarrenDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200731194156_remove target client")]
+    partial class removetargetclient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,6 +126,11 @@ namespace DesafioWarren.Data.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnName("Amount")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnName("Description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("OperationDate")
                         .HasColumnName("OperationDate")

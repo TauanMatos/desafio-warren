@@ -67,7 +67,7 @@ namespace DesafioWarren.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ClientId = table.Column<int>(nullable: false),
-                    AccountBallance = table.Column<decimal>(nullable: false)
+                    AccountBalance = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {

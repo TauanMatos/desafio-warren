@@ -3,14 +3,16 @@ using System;
 using DesafioWarren.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DesafioWarren.Data.Migrations
 {
     [DbContext(typeof(WarrenDbContext))]
-    partial class WarrenDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200731182154_initial migration")]
+    partial class initialmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,9 +131,16 @@ namespace DesafioWarren.Data.Migrations
                         .HasColumnName("OperationDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int?>("TargetAccountId")
+                        .IsRequired()
+                        .HasColumnName("TargetAccountId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("TargetAccountId");
 
                     b.ToTable("AccountMovement");
                 });
@@ -323,6 +332,13 @@ namespace DesafioWarren.Data.Migrations
                         .WithMany("AccountMovements")
                         .HasForeignKey("AccountId")
                         .HasConstraintName("FK_ACCOUNT_ACCOUNTMOVEMENT")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DesafioWarren.Model.Entities.Account", "TargetAccount")
+                        .WithMany()
+                        .HasForeignKey("TargetAccountId")
+                        .HasConstraintName("FK_TARGETACCOUNT_ACCOUNTMOVEMENT")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

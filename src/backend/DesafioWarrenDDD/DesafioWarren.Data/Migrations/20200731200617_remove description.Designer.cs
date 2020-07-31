@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesafioWarren.Data.Migrations
 {
     [DbContext(typeof(WarrenDbContext))]
-    [Migration("20200730155918_initial migration")]
-    partial class initialmigration
+    [Migration("20200731200617_remove description")]
+    partial class removedescription
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -94,8 +94,8 @@ namespace DesafioWarren.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<decimal>("AccountBallance")
-                        .HasColumnName("AccountBallance")
+                    b.Property<decimal>("AccountBalance")
+                        .HasColumnName("AccountBalance")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("ClientId")
@@ -131,16 +131,9 @@ namespace DesafioWarren.Data.Migrations
                         .HasColumnName("OperationDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("TargetAccountId")
-                        .IsRequired()
-                        .HasColumnName("TargetAccountId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("TargetAccountId");
 
                     b.ToTable("AccountMovement");
                 });
@@ -332,13 +325,6 @@ namespace DesafioWarren.Data.Migrations
                         .WithMany("AccountMovements")
                         .HasForeignKey("AccountId")
                         .HasConstraintName("FK_ACCOUNT_ACCOUNTMOVEMENT")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DesafioWarren.Model.Entities.Account", "TargetAccount")
-                        .WithMany()
-                        .HasForeignKey("TargetAccountId")
-                        .HasConstraintName("FK_TARGETACCOUNT_ACCOUNTMOVEMENT")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

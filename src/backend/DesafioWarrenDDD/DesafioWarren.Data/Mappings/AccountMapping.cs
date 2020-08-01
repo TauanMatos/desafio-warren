@@ -15,9 +15,9 @@ namespace DesafioWarren.Data.Mappings
 
             builder.HasKey(c => c.Id);
 
-            builder.Property(c => c.AccountBallance)
+            builder.Property(c => c.AccountBalance)
                 .IsRequired()
-                .HasColumnName("AccountBallance");
+                .HasColumnName("AccountBalance");
         }
     }
 }

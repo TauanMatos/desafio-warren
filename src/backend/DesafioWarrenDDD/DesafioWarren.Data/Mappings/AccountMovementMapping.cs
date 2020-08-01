@@ -27,7 +27,7 @@ namespace DesafioWarren.Data.Mappings
             builder.Property(c => c.Amount)
                 .IsRequired()
                 .HasColumnName("Amount");
-
+            
             builder.Property(c => c.AccountId)
                 .IsRequired()
                 .HasColumnName("AccountId");
@@ -37,17 +37,6 @@ namespace DesafioWarren.Data.Mappings
                 .HasForeignKey(d => d.AccountId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_ACCOUNT_ACCOUNTMOVEMENT");
-
-            builder.Property(c => c.TargetAccountId)
-                .IsRequired()
-                .HasColumnName("TargetAccountId");
-
-            builder.HasOne(c => c.TargetAccount)
-                .WithMany()
-                .HasForeignKey(k => k.TargetAccountId)
-                .HasConstraintName("FK_TARGETACCOUNT_ACCOUNTMOVEMENT");
-
-
         }
     }
 }

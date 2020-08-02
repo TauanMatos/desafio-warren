@@ -20,9 +20,9 @@ namespace DesafioWarren.Data.Repository
 
         public void Save(Account obj) => base.Update(obj);
 
-        public Account GetById(int id)
+        public Account GetByClientId(int id)
         {
-            var account = _warrenDbContext.Accounts.Include(account => account.Client).Where(a => a.Id == id).FirstOrDefault();
+            var account = _warrenDbContext.Accounts.Include(account => account.Client).Where(a => a.Client.Id == id).FirstOrDefault();
             return account;
         }
 

@@ -25,19 +25,14 @@ namespace DesafioWarren.Application.Controllers
             [FromServices] TokenConfigurations tokenConfigurations)
         {
             bool credenciaisValidas = false;
+            var userIdentity = await userManager.FindByNameAsync(usuario.UserName);
             if (usuario != null && !String.IsNullOrWhiteSpace(usuario.UserName))
             {
-                // Verifica a existência do usuário nas tabelas do
-                // ASP.NET Core Identity
-                var userIdentity = await userManager.FindByNameAsync(usuario.UserName);
                 if (userIdentity != null)
                 {
-                    // Efetua o login com base no Id do usuário e sua senha
                     var resultadoLogin = await signInManager.CheckPasswordSignInAsync(userIdentity, usuario.Password, false);
                     if (resultadoLogin.Succeeded)
                     {
-                        // Verifica se o usuário em questão possui
-                        // a role Acesso-APIAlturas
                         credenciaisValidas = await userManager.IsInRoleAsync(userIdentity, Roles.CLIENT_ROLE);
                     }
                 }
@@ -72,10 +67,11 @@ namespace DesafioWarren.Application.Controllers
                 return new LoginResponseDto()
                 {
                     Authenticated = true,
-                    Created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
-                    Expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
+                    Created = dataCriacao,
+                    Expiration = dataExpiracao,
                     AccessToken = token,
-                    Message = "OK"
+                    Message = "OK",
+                    ClientId = userIdentity.ClientId
                 };
             }
             else

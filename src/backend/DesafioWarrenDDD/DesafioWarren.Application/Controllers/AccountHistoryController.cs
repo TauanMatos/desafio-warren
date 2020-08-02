@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DesafioWarren.Model.Dtos;
 using DesafioWarren.Model.Entities;
 using DesafioWarren.Model.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +26,7 @@ namespace DesafioWarren.Application.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<IList<AccountMovement>> GetAccountHistory(int id)
+        public ActionResult<IList<AccountMovementResponseDto>> GetAccountHistory(int id)
         {
             try
             {

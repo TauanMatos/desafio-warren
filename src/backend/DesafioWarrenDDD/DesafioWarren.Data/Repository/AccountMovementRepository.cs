@@ -32,7 +32,7 @@ namespace DesafioWarren.Data.Repository
 
         public IList<AccountMovement> GetAccountMovementByAccountId(int accountId)
         {
-            var accountMovementsList = this._warrenDbContext.AccountMovements.Where(a => a.AccountId == accountId).ToList();
+            var accountMovementsList = this._warrenDbContext.AccountMovements.Where(a => a.AccountId == accountId).OrderBy(a => a.OperationDate).ToList();
             return accountMovementsList;
         }
     }

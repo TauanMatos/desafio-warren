@@ -34,13 +34,13 @@ namespace DesafioWarren.Services.DomainServices
         {
             var accountMovementList = this._accountMovementRepository.GetAccountMovementByAccountId(id);
 
-            var accountMovementDtoList = accountMovementList.Select(c => new AccountMovementResponseDto() 
-            { 
-                Id = c.Id, 
-                AccountId = c.AccountId, 
-                AccountOperation = Enum.GetName(typeof(AccountOperation), c.AccountOperation), 
-                Amount = c.Amount.ToString("0.##"), 
-                OperationDate = c.OperationDate 
+            var accountMovementDtoList = accountMovementList.Select(c => new AccountMovementResponseDto()
+            {
+                Id = c.Id,
+                AccountId = c.AccountId,
+                AccountOperation = Enum.GetName(typeof(AccountOperation), c.AccountOperation),
+                Amount = c.Amount.ToString("F"),
+                OperationDate = c.OperationDate.ToString("dd/MM/yyyy hh:mm tt") 
             }).ToList();
 
             return accountMovementDtoList;

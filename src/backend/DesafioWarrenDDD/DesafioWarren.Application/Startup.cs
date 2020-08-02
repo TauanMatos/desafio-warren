@@ -23,6 +23,7 @@ namespace DesafioWarren.Application
 {
     public class Startup
     {
+        private const string _defaultCorsPolicyName = "localhost";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -122,13 +123,13 @@ namespace DesafioWarren.Application
                 });
             });
 
+            services.AddCors();
             services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WarrenDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             app.UseSwagger();
-
 
             app.UseSwaggerUI(c =>
             {
@@ -147,6 +148,7 @@ namespace DesafioWarren.Application
 
             app.UseRouting();
 
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200", "http://localhost:80").AllowAnyHeader().AllowAnyMethod());
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -20,8 +20,9 @@ namespace DesafioWarren.Services.DomainServices
 
         public AccountResponseDto Deposit(AccountRequestDto accountDto)
         {
+            this.accountDtoValidation(accountDto);
             var accountResponse = new AccountResponseDto();
-            var account = this._accountRepository.GetById(accountDto.Id);
+            var account = this._accountRepository.GetByClientId(accountDto.ClientId);
             if (account != null)
             {
                 account.AccountBalance += accountDto.Value;
@@ -31,7 +32,7 @@ namespace DesafioWarren.Services.DomainServices
                 this._accountMovementService.InsertAccountMovement(account.Id, AccountOperation.Deposit, accountDto.Value);
 
                 accountResponse.Success = true;
-                accountResponse.AccountBalance = account.AccountBalance.ToString("0.##");
+                accountResponse.AccountBalance = account.AccountBalance.ToString("F");
             }
             else
             {
@@ -42,10 +43,17 @@ namespace DesafioWarren.Services.DomainServices
             return accountResponse;
         }
 
+        private void accountDtoValidation(AccountRequestDto accountDto)
+        {
+            if (accountDto.Value < 0)
+                throw new Exception("The amount value can't be negative");
+        }
+
         public AccountResponseDto Withdraw(AccountRequestDto accountDto)
         {
+            this.accountDtoValidation(accountDto);
             var accountResponse = new AccountResponseDto();
-            var account = this._accountRepository.GetById(accountDto.Id);
+            var account = this._accountRepository.GetByClientId(accountDto.ClientId);
 
             if (account != null)
             {
@@ -55,7 +63,7 @@ namespace DesafioWarren.Services.DomainServices
                     this._accountRepository.Save(account);
                     this._accountMovementService.InsertAccountMovement(account.Id, AccountOperation.Withdraw, accountDto.Value);
                     accountResponse.Success = true;
-                    accountResponse.AccountBalance = account.AccountBalance.ToString("0.##");
+                    accountResponse.AccountBalance = account.AccountBalance.ToString("F");
                 }
                 else
                 {
@@ -73,8 +81,9 @@ namespace DesafioWarren.Services.DomainServices
 
         public AccountResponseDto Payment(AccountRequestDto accountDto)
         {
+            this.accountDtoValidation(accountDto);
             var accountResponse = new AccountResponseDto();
-            var account = this._accountRepository.GetById(accountDto.Id);
+            var account = this._accountRepository.GetByClientId(accountDto.ClientId);
 
             if (account != null)
             {
@@ -84,7 +93,7 @@ namespace DesafioWarren.Services.DomainServices
                     this._accountRepository.Save(account);
                     this._accountMovementService.InsertAccountMovement(account.Id, AccountOperation.Payment, accountDto.Value);
                     accountResponse.Success = true;
-                    accountResponse.AccountBalance = account.AccountBalance.ToString("0.##");
+                    accountResponse.AccountBalance = account.AccountBalance.ToString("F");
                 }
                 else
                 {
@@ -99,6 +108,12 @@ namespace DesafioWarren.Services.DomainServices
             }
 
             return accountResponse;
+        }
+
+        public AccountDto GetAccount(int clientID)
+        {
+            var account = this._accountRepository.GetByClientId(clientID);
+            return new AccountDto() { AccountBalance = account.AccountBalance.ToString("F"), Name = account.Client.Name };
         }
     }
 }

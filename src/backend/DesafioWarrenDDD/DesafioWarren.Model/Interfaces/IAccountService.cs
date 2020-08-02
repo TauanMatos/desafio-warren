@@ -11,5 +11,6 @@ namespace DesafioWarren.Model.Interfaces
         AccountResponseDto Deposit(AccountRequestDto accountDto);
         AccountResponseDto Withdraw(AccountRequestDto accountDto);
         AccountResponseDto Payment(AccountRequestDto accountDto);
+        AccountDto GetAccount(int clientID);
     }
 }

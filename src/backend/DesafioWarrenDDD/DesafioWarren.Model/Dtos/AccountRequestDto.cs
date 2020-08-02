@@ -8,7 +8,7 @@ namespace DesafioWarren.Model.Dtos
     public class AccountRequestDto
     {
         [Required]
-        public int Id { get; set; }
+        public int ClientId { get; set; }
         
         [Required]
         public decimal Value { get; set; }

@@ -9,7 +9,7 @@ namespace DesafioWarren.Model.Dtos
     {
         public int Id { get; set; }
         public string AccountOperation { get; set; }
-        public DateTime OperationDate { get; set; }
+        public string OperationDate { get; set; }
         public string Amount { get; set; }
         public int AccountId { get; set; }
     }

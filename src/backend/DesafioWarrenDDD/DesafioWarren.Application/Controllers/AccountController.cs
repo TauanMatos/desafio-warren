@@ -69,5 +69,21 @@ namespace DesafioWarren.Application.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<AccountDto> GetAccountData(int clientId)
+        {
+            try
+            {
+                var response = this._accountService.GetAccount(clientId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
     }
 }

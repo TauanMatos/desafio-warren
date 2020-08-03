@@ -12,7 +12,6 @@ namespace DesafioWarren.Application.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize("Bearer")]
-    //[AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class DailyIncomeController : ControllerBase
     {

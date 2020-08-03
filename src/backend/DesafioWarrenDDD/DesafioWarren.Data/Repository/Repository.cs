@@ -39,5 +39,7 @@ namespace DesafioWarren.Data.Repository
 
         protected virtual TEntity Select(int id) =>
             _warrenDbContext.Set<TEntity>().Find(id);
+
+        protected virtual void SaveChanges() => _warrenDbContext.SaveChanges();
     }
 }

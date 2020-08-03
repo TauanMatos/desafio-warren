@@ -41,6 +41,10 @@ namespace DesafioWarren.Application
             services.AddScoped<IAccountMovementRepository, AccountMovementRepository>();
 
 
+            services.AddScoped<IDailyIncomeRepository, DailyIncomeRepository>();
+            services.AddScoped<IDailyIncomeService, DailyIncomeService>();
+
+
             services.AddDbContext<WarrenDbContext>(options =>
             {
                 var server = Configuration["database:mysql:server"];

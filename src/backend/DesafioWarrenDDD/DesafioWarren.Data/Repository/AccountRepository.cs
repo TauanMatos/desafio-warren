@@ -25,7 +25,7 @@ namespace DesafioWarren.Data.Repository
             var account = _warrenDbContext.Accounts.Include(account => account.Client).Where(a => a.Client.Id == id).FirstOrDefault();
             return account;
         }
-
+        public void Commit() => base.SaveChanges();
         public IList<Account> GetAll() => base.Select();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DesafioWarren.Data.Context;
 using DesafioWarren.Model.Entities;
 using DesafioWarren.Model.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,10 +30,10 @@ namespace DesafioWarren.Data.Repository
         public AccountMovement GetById(int id) => base.Select(id);
 
         public IList<AccountMovement> GetAll() => base.Select();
-
-        public IList<AccountMovement> GetAccountMovementByAccountId(int accountId)
+        public void Commit() => base.SaveChanges();
+        public IList<AccountMovement> GetAccountMovementByClientId(int accountId)
         {
-            var accountMovementsList = this._warrenDbContext.AccountMovements.Where(a => a.AccountId == accountId).OrderBy(a => a.OperationDate).ToList();
+            var accountMovementsList = this._warrenDbContext.AccountMovements.Include(a => a.Account).Where(a => a.Account.ClientId == accountId).OrderBy(a => a.OperationDate).ToList();
             return accountMovementsList;
         }
     }

@@ -11,5 +11,6 @@ namespace DesafioWarren.Model.Interfaces
         public void Save(Account obj);
         public Account GetByClientId(int id);
         public IList<Account> GetAll();
+        public void Commit();
     }
 }

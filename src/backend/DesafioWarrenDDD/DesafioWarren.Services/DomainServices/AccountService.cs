@@ -12,10 +12,13 @@ namespace DesafioWarren.Services.DomainServices
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IAccountMovementService _accountMovementService;
-        public AccountService(IAccountRepository accountRepository, IAccountMovementService accountMovement)
+        private readonly IDailyIncomeService _dailyIncomeService;
+
+        public AccountService(IAccountRepository accountRepository, IAccountMovementService accountMovement, IDailyIncomeService dailyIncomeService)
         {
             this._accountRepository = accountRepository;
             this._accountMovementService = accountMovement;
+            this._dailyIncomeService = dailyIncomeService;
         }
 
         public AccountResponseDto Deposit(AccountRequestDto accountDto)
@@ -28,6 +31,8 @@ namespace DesafioWarren.Services.DomainServices
                 account.AccountBalance += accountDto.Value;
 
                 this._accountRepository.Save(account);
+                this._accountRepository.Commit();
+                this._dailyIncomeService.CalculateDailyIncomeFromOperation(account);
 
                 this._accountMovementService.InsertAccountMovement(account.Id, AccountOperation.Deposit, accountDto.Value);
 
@@ -61,6 +66,8 @@ namespace DesafioWarren.Services.DomainServices
                 {
                     account.AccountBalance -= accountDto.Value;
                     this._accountRepository.Save(account);
+                    this._accountRepository.Commit();
+                    this._dailyIncomeService.CalculateDailyIncomeFromOperation(account);
                     this._accountMovementService.InsertAccountMovement(account.Id, AccountOperation.Withdraw, accountDto.Value);
                     accountResponse.Success = true;
                     accountResponse.AccountBalance = account.AccountBalance.ToString("F");
@@ -91,6 +98,8 @@ namespace DesafioWarren.Services.DomainServices
                 {
                     account.AccountBalance -= accountDto.Value;
                     this._accountRepository.Save(account);
+                    this._accountRepository.Commit();
+                    this._dailyIncomeService.CalculateDailyIncomeFromOperation(account);
                     this._accountMovementService.InsertAccountMovement(account.Id, AccountOperation.Payment, accountDto.Value);
                     accountResponse.Success = true;
                     accountResponse.AccountBalance = account.AccountBalance.ToString("F");

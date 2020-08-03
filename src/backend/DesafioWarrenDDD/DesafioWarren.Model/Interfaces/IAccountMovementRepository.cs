@@ -11,6 +11,7 @@ namespace DesafioWarren.Model.Interfaces
         void Save(AccountMovement obj);
         AccountMovement GetById(int id);
         IList<AccountMovement> GetAll();
-        IList<AccountMovement> GetAccountMovementByAccountId(int accountId);
+        IList<AccountMovement> GetAccountMovementByClientId(int accountId);
+        void Commit();
     }
 }

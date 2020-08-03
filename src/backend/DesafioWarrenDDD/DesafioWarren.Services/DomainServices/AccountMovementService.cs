@@ -32,7 +32,7 @@ namespace DesafioWarren.Services.DomainServices
 
         public IList<AccountMovementResponseDto> GetAccountMovement(int id)
         {
-            var accountMovementList = this._accountMovementRepository.GetAccountMovementByAccountId(id);
+            var accountMovementList = this._accountMovementRepository.GetAccountMovementByClientId(id);
 
             var accountMovementDtoList = accountMovementList.Select(c => new AccountMovementResponseDto()
             {

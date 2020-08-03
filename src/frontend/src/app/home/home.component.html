@@ -113,7 +113,7 @@
                 </div>
 
                 <div style="text-align: center;">
-                    <button type="button" class="btn btn-link">Logout</button>
+                    <button type="button" class="btn btn-link" (click)="logout()">Logout</button>
                 </div>
             </div>
         </div>
@@ -130,30 +130,16 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Date</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Ammount</th>
+                            <th scope="col">Base Amount</th>
+                            <th scope="col">Daily Yeld</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>24/04/2020</td>
-                            <td>Deposit</td>
-                            <td>R$ 500,00</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>28/04/2020</td>
-                            <td>Payment</td>
-                            <td>R$ 50,00</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>27/04/2020</td>
-                            <td>Withdraw</td>
-                            <td>R$ 200,00</td>
+                        <tr *ngFor="let item of dailyIncomes">
+                            <td>{{item.date}}</td>
+                            <td>R$ {{item.baseAmount}}</td>
+                            <td>R$ {{item.dailyYeld}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -173,7 +159,6 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Date</th>
                             <th scope="col">Type</th>
                             <th scope="col">Ammount</th>
@@ -181,7 +166,6 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of accountMovements">
-                            <th scope="row">{{item.id}}</th>
                             <td>{{item.operationDate}}</td>
                             <td>{{item.accountOperation}}</td>
                             <td>R$ {{item.amount}}</td>

@@ -26,7 +26,7 @@ Para executar o frontend em Angular 2+ é necessária a instalação dos pacotes
 ```sh
 $ cd frontend
 $ npm install
-$ ng serve
+$ npm start
 ```
 
 # - Usuários da aplicação

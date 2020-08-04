@@ -3,9 +3,10 @@ import { first } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../_services/account.service';
-import { AuthenticationService } from '@app/_services';
+import { AuthenticationService, DailyIncomeService } from '@app/_services';
 import { AccountMovementDto } from '../_models/accountMovementDto';
 import { AccountMovementService } from '../_services/accountMovement.service';
+import { DailyIncomeDto } from '../_models/dailyIncomeDto';
 
 
 @Component({
@@ -26,11 +27,11 @@ export class HomeComponent {
     name = '';
     clientId: number;
     accountMovements: AccountMovementDto[];
+    dailyIncomes: DailyIncomeDto[];
 
     constructor(
         private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
+        private dailyIncomeService: DailyIncomeService,
         private accountService: AccountService,
         private authenticationService: AuthenticationService,
         private accountMovementService: AccountMovementService
@@ -47,6 +48,7 @@ export class HomeComponent {
             });
 
         this.getAccountHistory();
+        this.getDailyIncomes();
 
         this.depositForm = this.formBuilder.group({
             depositAmount: ['', Validators.required],
@@ -59,6 +61,14 @@ export class HomeComponent {
         this.paymentForm = this.formBuilder.group({
             paymentAmount: ['', Validators.required],
         });
+    }
+
+
+    getDailyIncomes() {
+        this.dailyIncomeService.getDailyIncome(this.clientId).pipe(first()).subscribe(
+            data => {
+                this.dailyIncomes = data;
+            });
     }
 
     get fd() { return this.depositForm.controls; }
@@ -116,6 +126,12 @@ export class HomeComponent {
         this.withdrawForm.reset();
         this.paymentForm.reset();
     }
+
+    logout(){
+        this.authenticationService.logout();
+        location.reload(true);
+    }
+
     makeRequest(value: number, operation: string) {
 
 
@@ -125,7 +141,8 @@ export class HomeComponent {
                 data => {
                     if (data.success) {
                         this.accountBalance = data.accountBalance;
-                        this.getAccountHistory()
+                        this.getAccountHistory();
+                        this.getDailyIncomes();
                         this.clearForm();
                     }
                     else {

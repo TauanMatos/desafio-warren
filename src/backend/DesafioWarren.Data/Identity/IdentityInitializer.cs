@@ -1,9 +1,9 @@
 ﻿using DesafioWarren.Data.Context;
+using DesafioWarren.Model.Dtos;
 using DesafioWarren.Model.Entities;
+using DesafioWarren.Model.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DesafioWarren.Data.Identity
 {
@@ -12,16 +12,19 @@ namespace DesafioWarren.Data.Identity
         private readonly WarrenDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAccountService _accountService;
 
 
         public IdentityInitializer(
             WarrenDbContext context,
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IAccountService accountService)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _accountService = accountService;
         }
 
         public void Initialize()
@@ -55,7 +58,7 @@ namespace DesafioWarren.Data.Identity
                             Account = new Account()
                         }
                     },
-                    "Client@1", Roles.CLIENT_ROLE);
+                    "Client@1", Roles.CLIENT_ROLE, true);
 
                 CreateUser(
                     new ApplicationUser()
@@ -80,7 +83,8 @@ namespace DesafioWarren.Data.Identity
         private void CreateUser(
             ApplicationUser user,
             string password,
-            string initialRole = null)
+            string initialRole = null,
+            bool makeDeposit = false)
         {
             if (_userManager.FindByNameAsync(user.UserName).Result == null)
             {
@@ -93,6 +97,16 @@ namespace DesafioWarren.Data.Identity
                     _userManager.AddToRoleAsync(user, initialRole).Wait();
                 }
             }
+
+            if (makeDeposit)
+                this.MakeDeposit(user.UserName);
+        }
+
+        private void MakeDeposit(string userName)
+        {
+            var user = _userManager.FindByNameAsync(userName).Result;
+
+            this._accountService.Deposit(new AccountRequestDto() { ClientId = user.ClientId, Value = 10000 });            
         }
     }
 }

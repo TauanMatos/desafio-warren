@@ -131,7 +131,7 @@ namespace DesafioWarren.Application
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WarrenDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WarrenDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IAccountService accountService)
         {
             app.UseSwagger();
 
@@ -145,7 +145,7 @@ namespace DesafioWarren.Application
                 app.UseDeveloperExceptionPage();
             }
 
-            new IdentityInitializer(context, userManager, roleManager)
+            new IdentityInitializer(context, userManager, roleManager, accountService)
                 .Initialize();
 
             app.UseHttpsRedirection();
